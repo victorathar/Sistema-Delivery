@@ -40,7 +40,39 @@ Plataforma completa de gestão de delivery para restaurantes, integrada a um age
 
 ---
 
-## Identidade Visual
+## 🛠️ Stack Técnica
+
+### Frontend
+| Tecnologia | Versão | Função |
+|------------|--------|--------|
+| React | 18.3+ | Biblioteca UI principal |
+| TypeScript | 5.8+ | Tipagem estática |
+| Vite | 5.4+ | Bundler e dev server |
+| Tailwind CSS | 3.4+ | Estilização utility-first |
+| Zustand | 5.0+ | Estado global |
+| React Router | 6.30+ | Roteamento SPA |
+| Recharts | 2.15+ | Gráficos e dashboards |
+| Lucide React | 0.462+ | Biblioteca de ícones |
+| date-fns | 3.6+ | Manipulação de datas |
+| Sonner | 1.7+ | Notificações toast |
+
+### Backend
+| Tecnologia | Função |
+|------------|--------|
+| NestJS + TypeScript | API REST e lógica de negócio |
+| Supabase JS Client | Conexão com banco PostgreSQL |
+| Supabase Realtime | Websockets para pedidos ao vivo |
+
+### Agente de IA
+| Tecnologia | Função |
+|------------|--------|
+| N8N | Automações e orquestração de fluxos |
+| Evolution API | Integração com WhatsApp |
+| Typebot | Interface conversacional do agente |
+
+---
+
+## 🎨 Identidade Visual
 
 | Atributo | Valor |
 |----------|-------|
