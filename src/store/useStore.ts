@@ -99,12 +99,14 @@ export const useStore = create<AppState>((set, get) => ({
 
   // PEDIDOS
   atualizarStatusPedido: async (id, novoStatus) => {
+    const { restauranteId } = get()
     get()._setPedidoStatus(id, novoStatus)
-    await api.atualizarStatusPedido(id, novoStatus)
+    await api.atualizarStatusPedido(id, novoStatus, restauranteId ?? undefined)
   },
 
   removerPedido: async (id) => {
-    await api.removerPedido(id)
+    const { restauranteId } = get()
+    await api.removerPedido(id, restauranteId ?? undefined)
     set((s) => ({ pedidos: s.pedidos.filter((p) => p.id !== id) }))
   },
 
@@ -161,8 +163,9 @@ export const useStore = create<AppState>((set, get) => ({
   },
 
   removerItemCardapio: async (id) => {
+    const { restauranteId } = get()
     set((s) => ({ cardapio: s.cardapio.filter((item) => item.id !== id) }))
-    await api.removerItemCardapio(id)
+    await api.removerItemCardapio(id, restauranteId ?? undefined)
   },
 
   // CATEGORIAS
@@ -178,7 +181,8 @@ export const useStore = create<AppState>((set, get) => ({
   },
 
   atualizarCategoria: async (id, nome, corDisplay) => {
-    await api.atualizarCategoria(id, nome, corDisplay)
+    const { restauranteId } = get()
+    await api.atualizarCategoria(id, nome, corDisplay, restauranteId ?? undefined)
     set((s) => ({
       categorias: s.categorias.map((c) =>
         c.id === id ? { ...c, nome, cor_display: corDisplay ?? null } : c
@@ -190,7 +194,8 @@ export const useStore = create<AppState>((set, get) => ({
   },
 
   removerCategoria: async (id) => {
-    const resultado = await api.removerCategoria(id)
+    const { restauranteId } = get()
+    const resultado = await api.removerCategoria(id, restauranteId ?? undefined)
     if (resultado.ok) {
       set((s) => ({
         categorias: s.categorias.filter((c) => c.id !== id),

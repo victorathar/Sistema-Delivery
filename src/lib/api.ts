@@ -54,16 +54,19 @@ export async function criarCategoria(restauranteId: string, nome: string, corDis
   return data
 }
 
-export async function atualizarCategoria(id: string, nome: string, corDisplay?: string | null): Promise<void> {
-  const { error } = await supabase
+export async function atualizarCategoria(id: string, nome: string, corDisplay?: string | null, restauranteId?: string): Promise<void> {
+  let query = supabase
     .from('categorias')
     .update({ nome, cor_display: corDisplay ?? null })
     .eq('id', id)
 
+  if (restauranteId) query = query.eq('restaurante_id', restauranteId)
+
+  const { error } = await query
   if (error) throw error
 }
 
-export async function removerCategoria(id: string): Promise<{ ok: boolean; motivo?: string }> {
+export async function removerCategoria(id: string, restauranteId?: string): Promise<{ ok: boolean; motivo?: string }> {
   const { count } = await supabase
     .from('cardapio_itens')
     .select('id', { count: 'exact', head: true })
@@ -73,11 +76,14 @@ export async function removerCategoria(id: string): Promise<{ ok: boolean; motiv
     return { ok: false, motivo: `Esta categoria possui ${count} item(ns). Reatribua-os antes de excluir.` }
   }
 
-  const { error } = await supabase
+  let query = supabase
     .from('categorias')
     .delete()
     .eq('id', id)
 
+  if (restauranteId) query = query.eq('restaurante_id', restauranteId)
+
+  const { error } = await query
   if (error) throw error
   return { ok: true }
 }
@@ -168,16 +174,20 @@ export async function atualizarItemCardapio(
     .from('cardapio_itens')
     .update(patch)
     .eq('id', id)
+    .eq('restaurante_id', restauranteId)
 
   if (error) throw error
 }
 
-export async function removerItemCardapio(id: string): Promise<void> {
-  const { error } = await supabase
+export async function removerItemCardapio(id: string, restauranteId?: string): Promise<void> {
+  let query = supabase
     .from('cardapio_itens')
     .delete()
     .eq('id', id)
 
+  if (restauranteId) query = query.eq('restaurante_id', restauranteId)
+
+  const { error } = await query
   if (error) throw error
 }
 
@@ -214,24 +224,30 @@ export async function fetchPedidos(restauranteId: string): Promise<Pedido[]> {
   }))
 }
 
-export async function atualizarStatusPedido(id: string, novoStatus: PedidoStatus): Promise<void> {
-  const { error } = await supabase
+export async function atualizarStatusPedido(id: string, novoStatus: PedidoStatus, restauranteId?: string): Promise<void> {
+  let query = supabase
     .from('pedidos')
     .update({ status: novoStatus })
     .eq('id', id)
 
+  if (restauranteId) query = query.eq('restaurante_id', restauranteId)
+
+  const { error } = await query
   if (error) throw error
 
   // Notificar cliente via WhatsApp (fire-and-forget)
   notificarCliente(novoStatus, id).catch(() => {})
 }
 
-export async function removerPedido(id: string): Promise<void> {
-  const { error } = await supabase
+export async function removerPedido(id: string, restauranteId?: string): Promise<void> {
+  let query = supabase
     .from('pedidos')
     .delete()
     .eq('id', id)
 
+  if (restauranteId) query = query.eq('restaurante_id', restauranteId)
+
+  const { error } = await query
   if (error) throw error
 }
 

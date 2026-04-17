@@ -55,7 +55,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   async function signIn(username: string, password: string) {
-    const email = `${username}@vipperfood.com`
+    const domain = import.meta.env.VITE_AUTH_EMAIL_DOMAIN ?? 'vipperfood.com'
+    const email = `${username}@${domain}`
     const { data, error } = await supabase.auth.signInWithPassword({ email, password })
     if (error) return { error: 'Usuário ou senha inválidos.' }
 
